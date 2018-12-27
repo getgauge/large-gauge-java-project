@@ -4,13 +4,13 @@ import com.thoughtworks.gauge.TableRow;
 
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepImplementation {
 
     private HashSet<Character> vowels;
 
-    @Step("Vowels in English language are <vowelString>.")
+    @Step("Vowels in English language are <vowels>.")
     public void setLanguageVowels(String vowelString) {
         vowels = new HashSet<>();
         for (char ch : vowelString.toCharArray()) {
@@ -21,7 +21,7 @@ public class StepImplementation {
     @Step("The word <word> has <expectedCount> vowels.")
     public void verifyVowelsCountInWord(String word, int expectedCount) {
         int actualCount = countVowels(word);
-        assertEquals(expectedCount, actualCount);
+        assertThat(expectedCount).isEqualTo(actualCount);
     }
 
     @Step("Almost all words have vowels <wordsTable>")
@@ -31,17 +31,7 @@ public class StepImplementation {
             int expectedCount = Integer.parseInt(row.getCell("Vowel Count"));
             int actualCount = countVowels(word);
 
-            assertEquals(expectedCount, actualCount);
-        }
-    }
-
-    @Step("generate implementations")
-    public void generateImplementations(){
-        for(int i=0;i<1000;i++)
-        {
-            System.out.println("@Step(\"Step implementation "+i+"\")\n" +
-                    "    public void implementation"+i+"() {\n" +
-                    "    }\n");
+            assertThat(expectedCount).isEqualTo(actualCount);
         }
     }
 
@@ -53,5 +43,20 @@ public class StepImplementation {
             }
         }
         return count;
+    }
+
+	@Step("a ne")
+	public void aNewStep(){
+		throw new UnsupportedOperationException("Provide custom implementation");
+	}
+
+    @Step("generate implementations")
+    public void generateImplementations(){
+        for(int i=0;i<1000;i++)
+        {
+            System.out.println("@Step(\"Step implementation "+i+"\")\n" +
+                    "    public void implementation"+i+"() {\n" +
+                    "    }\n");
+        }
     }
 }
